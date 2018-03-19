@@ -4,23 +4,27 @@ import java.awt.Graphics2D;
  
 public class Particle {
  
-    public double x, y, vx, vy, mass; // we are assuming m is in units such that G=1 (approx 1.5e10 kg)
+    public double x, y, vx, vy, mass, charge; // we are assuming m is in units such that G=1 (approx 1.5e10 kg)
     private int size; // size of rendered particle
     private Color color;
  
     
-    public Particle(double x, double y, double vx, double vy, double mass, int size, Color c){
+    public Particle(double x, double y, double vx, double vy, double mass, double charge, int size, Color c){
         this.x = x;
         this.y = y;
         this.vx = vx;
         this.vy = vy;
         this.mass = mass;
+        this.charge = charge;
         this.size = size;
         this.color = c;
     }
     
     public Particle(double x, double y, double mass, int size){
-    	this(x, y, 0, 0, mass, size, Color.blue);
+    	this(x, y, 0, 0, mass, 0, size, Color.blue);
+    }
+    public Particle(double x, double y, double vx, double vy, double mass, int size){
+    	this(x, y, vx, vy, mass, 0, size, Color.blue);
     }
      
     public void render(Graphics g){

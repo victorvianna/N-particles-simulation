@@ -23,9 +23,13 @@ public class VelocityUpdater extends Thread{
 				Particle dst = particles.get(i);
 				// we are assuming m is in units such that G=1 (approx 1.5e10 kg)
 				
-				double norm2 = (dst.x-src.x)*(dst.x-src.x)+(dst.y-src.y)*(dst.y-src.y);
-				ax += dst.mass / (norm2*Math.sqrt(norm2)) * (dst.x-src.x); 
-				ay += dst.mass / (norm2*Math.sqrt(norm2)) * (dst.y-src.y);
+				double[] gravity = new Gravity(src, dst).calculate();
+				ax += gravity[0]/src.mass;  
+				ay += gravity[1]/src.mass;
+				
+				double[] electric = new Electric(src, dst).calculate();
+				ax += electric[0]/src.mass;  
+				ay += electric[1]/src.mass;
 			}
 		}
 		

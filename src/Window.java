@@ -16,7 +16,7 @@ public class Window extends JFrame {
     private ArrayList<Particle> particles = new ArrayList<Particle>(500);
     private BufferStrategy bufferstrat = null;
     private Canvas render;    
-    private final int WIDTH = 800, HEIGHT = 800, MAX_SPEED =5, PARTICLE_SIZE = 5;
+    private final int WIDTH = 800, HEIGHT = 800, MAX_SPEED =50, PARTICLE_SIZE = 5;
     private final double DELTA_TIME = 1/60.0; // time interval in seconds
     
  
@@ -58,7 +58,8 @@ public class Window extends JFrame {
         
         for(int i=0; i<n; i++)
         {
-        	addParticle();
+        	//addStaticParticle();
+        	addRandomParticle();
         }
     }
  
@@ -125,11 +126,20 @@ public class Window extends JFrame {
     }
    
 
-    void addParticle(){
+    void addStaticParticle(){
         double x, y;
         x = (Math.random()*WIDTH);
         y =  (Math.random()*HEIGHT);
  
         particles.add(new Particle(x,y, 100000, PARTICLE_SIZE));
+    }
+    void addRandomParticle(){
+        double x, y, vx, vy;
+        x = (Math.random()*WIDTH);
+        y =  (Math.random()*HEIGHT);
+        vx = (2*Math.random()-1)*MAX_SPEED;
+        vy = (2*Math.random()-1)*MAX_SPEED;
+ 
+        particles.add(new Particle(x,y,vx, vy,100000, PARTICLE_SIZE));
     }
 }
