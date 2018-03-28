@@ -1,28 +1,36 @@
 package src;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 import src.particles.*;
 
-public class PositionUpdater extends Thread{
-	private ArrayList<Particle> particles;
-	private int index; // index of the particle we will update
+public class PositionUpdater implements Callable<Boolean> {
+	private final ArrayList< ArrayList<Particle> > particles;
+	private final int[] turn;
+	private final int index; // index of the particle we will update
 	private final double DELTA_TIME;
-	public PositionUpdater(ArrayList<Particle> particles, int index, double DELTA_TIME)
+
+	public PositionUpdater(ArrayList< ArrayList<Particle> > particles, int index, double DELTA_TIME, int[] turn)
 	{
 		this.particles = particles;
+		this.turn = turn;
 		this.index = index;
 		this.DELTA_TIME = DELTA_TIME;
 	}
 	
-	public void run()
+	public Boolean call()
 	{
-		Particle particle = particles.get(index);
+	        int cur = this.turn[0];
+		int past = 1 - cur;
 
-		double x = particle.x;
-		double y = particle.y;
-		double vx = particle.vx;
-		double vy = particle.vy;
+		Particle particle_past = particles.get(past).get(index);
+		Particle particle_cur = particles.get(cur).get(index);
+
+		double x = particle_past.x;
+		double y = particle_past.y;
+		double vx = particle_past.vx;
+		double vy = particle_past.vy;
 
 		x = x + vx * DELTA_TIME;
 		y = y + vy * DELTA_TIME;
@@ -42,9 +50,11 @@ public class PositionUpdater extends Thread{
 			vy = -vy;
 		}
 
-		particle.x = x;
-		particle.y = y;
-		particle.vx = vx;
-		particle.vy = vy;
+		particle_cur.x = x;
+		particle_cur.y = y;
+		particle_cur.vx = vx;
+		particle_cur.vy = vy;
+
+		return new Boolean(true);
 	}
 }
