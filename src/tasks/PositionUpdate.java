@@ -24,21 +24,25 @@ public class PositionUpdate extends Task {
 		x = x + vx * DELTA_TIME;
 		y = y + vy * DELTA_TIME;
 
-		if (x < 0) {
-			x = -x;
-			vx = -vx;
-		} else if (x > ParticleWindow.WIDTH) {
-			x = ParticleWindow.WIDTH - (x - ParticleWindow.WIDTH);
-			vx = -vx;
-		}
-		if (y < 0) {
-			y = -y;
-			vy = -vy;
-		} else if (y > ParticleWindow.HEIGHT) {
-			y = ParticleWindow.HEIGHT - (y - ParticleWindow.HEIGHT);
-			vy = -vy;
-		}
+		if(ParticleWindow.bouncingEnabled)
+		{
+			if (x < 0) {
+				x = -x;
+				vx = -vx;
+			} else if (x > ParticleWindow.WIDTH) {
+				x = ParticleWindow.WIDTH - (x - ParticleWindow.WIDTH);
+				vx = -vx;
+			}
+			if (y < 0) {
+				y = -y;
+				vy = -vy;
+			} else if (y > ParticleWindow.HEIGHT) {
+				y = ParticleWindow.HEIGHT - (y - ParticleWindow.HEIGHT);
+				vy = -vy;
+			}
 
+		}
+		
 		particle_cur.x = x;
 		particle_cur.y = y;
 		particle_cur.vx = vx;
