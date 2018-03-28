@@ -4,14 +4,12 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Collection;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.JFrame;
@@ -20,28 +18,85 @@ import particles.*;
 import tasks.*;
 import forces.*;
 
-public class Window extends JFrame {
+public class ParticleWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private ArrayList<ArrayList<Particle>> particles = new ArrayList<>();
+	private ArrayList<ArrayList<Particle>> particles;
 	private ArrayList<Force> forces = new ArrayList<Force>();
 	private BufferStrategy bufferstrat = null;
 	private Canvas render;
 	public final static int WIDTH = 800, HEIGHT = 800, MAX_SPEED = 2000, PARTICLE_SIZE = 5;
 	private final double DELTA_TIME = 1 / 600.0; // time interval in seconds
+	
+	public static void main(String[] args) throws InterruptedException, IOException {
+		System.out.println("Welcome to the simulation!");
+		int n_particles =0;
+		boolean finishedInput = false;
+		boolean movingParticles = false;
+		ArrayList<ArrayList<Particle>> readParticles = new ArrayList<>();
+		readParticles.add(new ArrayList<>());
+		readParticles.add(new ArrayList<>());
 
-	public static void main(String[] args) throws InterruptedException {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("Type in the number of particles you want: ");
-		int n_particles = sc.nextInt();
+		String ans;
+		do {
+			System.out.println("Do you wish moving particles?(y/n)");
+			ans = sc.next();
+			if(!ans.equals("y") && !ans.equals("n"))
+				System.out.println("Invalid answer");
+		}while(!ans.equals("y") && !ans.equals("n"));
+		if(ans.equals("y"))
+			movingParticles = true;
+		while(!finishedInput) {	
+			do {
+				System.out.println("Add a particle?(y/n)");
+				ans = sc.next();
+				if(!ans.equals("y") && !ans.equals("n"))
+					System.out.println("Invalid answer");
+			}while(!ans.equals("y") && !ans.equals("n"));
+			if(ans.equals("y"))
+			{	
+				double x, y, vx, vy, mass, charge; 
+				x = (Math.random() * WIDTH); y = (Math.random() * HEIGHT);
+				if(movingParticles)
+				{
+					vx = (Math.random() * WIDTH); vy = (Math.random() * HEIGHT);
+				}
+				else {
+					vx = 0; vy = 0;
+				}
+				
+				System.out.println("Mass?");
+				mass = sc.nextDouble();
+				System.out.println("Charge?");
+				charge = sc.nextDouble();
+				
+				if(charge==0) {
+					readParticles.get(0).add(new Particle(x, y, vx, vy, mass, PARTICLE_SIZE));
+					readParticles.get(1).add(new Particle(x, y, vx, vy, mass, PARTICLE_SIZE));
+				}
+				else {
+					readParticles.get(0).add(new ElectricParticle(x, y, vx, vy, mass, PARTICLE_SIZE, charge));
+					readParticles.get(1).add(new ElectricParticle(x, y, vx, vy, mass, PARTICLE_SIZE, charge));
+				}
+				
+				n_particles++;
+			}
+			else if(n_particles==0)
+				System.out.println("Add at least 1 particle");
+			else
+				finishedInput = true;
+		}
 		sc.close();
-		Window window = new Window("Particles: ", n_particles);
+		
+		ParticleWindow window = new ParticleWindow(readParticles);			
 		window.runSimulation();
 	}
-
-	public Window(String title, int n) {
+	
+	public ParticleWindow(ArrayList<ArrayList<Particle>> readParticles) {
 		super();
-		setTitle(title);
+		particles = readParticles;
+		setTitle("Simulation");
 		setIgnoreRepaint(true);
 		setResizable(false);
 
@@ -62,13 +117,6 @@ public class Window extends JFrame {
 
 		render.createBufferStrategy(2);
 		bufferstrat = render.getBufferStrategy();
-
-		particles.add(new ArrayList<>());
-		particles.add(new ArrayList<>());
-
-		for (int i = 0; i < n; i++) {
-			addRandomParticle();
-		}
 
 		forces.add(new ElectricForce());
 		forces.add(new GravityForce());
@@ -127,26 +175,5 @@ public class Window extends JFrame {
 		g2d.dispose();
 	}
 	
-	void addRandomParticle() {
-		double x, y, vx, vy, mass, radius, charge;
-		x = (Math.random() * WIDTH);
-		y = (Math.random() * HEIGHT);
-		vx = (2 * Math.random() - 1) * MAX_SPEED;
-		vy = (2 * Math.random() - 1) * MAX_SPEED;
-		mass = 10000;
-		charge = (Math.random()-0.5)*10000;
-
-		int type = (int) (Math.random() * 2);
-		if (type == 0) {
-			Particle p1 = new ElectricParticle(x, y, vx, vy, mass , PARTICLE_SIZE, charge);
-			Particle p2 = new ElectricParticle(x, y, vx, vy, mass, PARTICLE_SIZE, charge);
-			particles.get(0).add(p1);
-			particles.get(1).add(p2);
-		} else {
-			Particle p1 = new Particle(x, y, vx, vy, mass, PARTICLE_SIZE);
-			Particle p2 = new Particle(x, y, vx, vy, mass, PARTICLE_SIZE);
-			particles.get(0).add(p1);
-			particles.get(1).add(p2);
-		}
-	}
+	
 }

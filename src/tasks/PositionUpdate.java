@@ -27,15 +27,15 @@ public class PositionUpdate extends Task {
 		if (x < 0) {
 			x = -x;
 			vx = -vx;
-		} else if (x > Window.WIDTH) {
-			x = Window.WIDTH - (x - Window.WIDTH);
+		} else if (x > ParticleWindow.WIDTH) {
+			x = ParticleWindow.WIDTH - (x - ParticleWindow.WIDTH);
 			vx = -vx;
 		}
 		if (y < 0) {
 			y = -y;
 			vy = -vy;
-		} else if (y > Window.HEIGHT) {
-			y = Window.HEIGHT - (y - Window.HEIGHT);
+		} else if (y > ParticleWindow.HEIGHT) {
+			y = ParticleWindow.HEIGHT - (y - ParticleWindow.HEIGHT);
 			vy = -vy;
 		}
 

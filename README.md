@@ -12,10 +12,11 @@ Java 1.8
 
 ## Instructions
 
-Add the desired image file as image.jpg to the project root, open a shell and run
+Open a shell and run  
 ```
 $ sudo bash RUN.sh
-```
+```  
+You can either enter the particle data through the shell or pre-record it in a file input.txt. If such a file exists, input will be read there.
 
 ## Main algorithmic ideas
 
