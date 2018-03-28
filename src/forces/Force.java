@@ -1,6 +1,9 @@
-package src.forces;
+/**
+ * Base class for forces. Every force inherits from it.
+ */
+package forces;
 
-import src.particles.*;
+import particles.*;
 
 public interface Force {
 	// represents the force inflicted on particle A by particle B
