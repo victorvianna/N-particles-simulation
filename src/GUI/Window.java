@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -32,12 +33,9 @@ public class Window extends JFrame {
 	public static void main(String[] args) throws InterruptedException {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Type in the number of particles you want: ");
-
 		int n_particles = sc.nextInt();
-
-		Window window = new Window("Particles: ", n_particles);
 		sc.close();
-
+		Window window = new Window("Particles: ", n_particles);
 		window.runSimulation();
 	}
 
@@ -79,7 +77,7 @@ public class Window extends JFrame {
 	public void runSimulation() throws InterruptedException {
 		final int[] turn = new int[1]; turn[0] =0;
 		ExecutorService executor = Executors.newWorkStealingPool();
-		Collection<Task> tasks = AllUpdateTasks(turn);
+		Collection<Task> tasks = allUpdateTasks(turn);
 
 		while (true) {
 			executor.invokeAll(tasks);
@@ -94,7 +92,7 @@ public class Window extends JFrame {
 		}
 	}
 
-	private Collection<Task> AllUpdateTasks(int[] turn) {
+	private Collection<Task> allUpdateTasks(int[] turn) {
 		int n = particles.get(0).size();
 		Collection<Task> tasks = new ArrayList<>(2 * n);
 		for (int i = 0; i < n; i++)
@@ -108,10 +106,11 @@ public class Window extends JFrame {
 		do {
 			do {
 				Graphics2D g2d = (Graphics2D) bufferstrat.getDrawGraphics();
+				g2d.setColor(Color.WHITE);
 				g2d.fillRect(0, 0, render.getWidth(), render.getHeight());
 
 				for (int i = 0; i < particles.get(0).size(); i++)
-					particles.get(turn[0]).get(i).render(g2d);
+					renderParticle(particles.get(turn[0]).get(i),g2d);
 
 				g2d.dispose();
 			} while (bufferstrat.contentsRestored());
@@ -120,23 +119,32 @@ public class Window extends JFrame {
 		} while (bufferstrat.contentsLost());
 	}
 
+	public void renderParticle(Particle p, Graphics g) {
+		double x = p.x, y = p.y; int radius = p.getRadius();
+		Graphics2D g2d = (Graphics2D) g.create();
+		g2d.setColor(p.getColor());
+		g2d.fillOval((int) (x - (radius / 2)), (int) (y - (radius / 2)), radius, radius);
+		g2d.dispose();
+	}
+	
 	void addRandomParticle() {
-		double x, y, vx, vy;
+		double x, y, vx, vy, mass, radius, charge;
 		x = (Math.random() * WIDTH);
 		y = (Math.random() * HEIGHT);
 		vx = (2 * Math.random() - 1) * MAX_SPEED;
 		vy = (2 * Math.random() - 1) * MAX_SPEED;
+		mass = 10000;
+		charge = (Math.random()-0.5)*10000;
 
 		int type = (int) (Math.random() * 2);
-		type = 0;
 		if (type == 0) {
-			Particle p1 = new ElectricParticle(x, y, vx, vy, 10000, PARTICLE_SIZE, 10000);
-			Particle p2 = new ElectricParticle(x, y, vx, vy, 10000, PARTICLE_SIZE, 10000);
+			Particle p1 = new ElectricParticle(x, y, vx, vy, mass , PARTICLE_SIZE, charge);
+			Particle p2 = new ElectricParticle(x, y, vx, vy, mass, PARTICLE_SIZE, charge);
 			particles.get(0).add(p1);
 			particles.get(1).add(p2);
 		} else {
-			Particle p1 = new Particle(x, y, vx, vy, 10000, PARTICLE_SIZE);
-			Particle p2 = new Particle(x, y, vx, vy, 10000, PARTICLE_SIZE);
+			Particle p1 = new Particle(x, y, vx, vy, mass, PARTICLE_SIZE);
+			Particle p2 = new Particle(x, y, vx, vy, mass, PARTICLE_SIZE);
 			particles.get(0).add(p1);
 			particles.get(1).add(p2);
 		}

@@ -5,36 +5,41 @@
  */
 package particles;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 public class Particle {
 	public double x, y, vx, vy, mass;
-	private int radius; // radius of rendered particle
-	private Color color;
+	protected final int radius; // radius of rendered particle
+	protected Color color; //color of rendered particle
+	protected final Color defaultColor = Color.red; //color of neutral charge particle 
 
-	public Particle(double x, double y, double vx, double vy, double mass, int radius, Color c) {
+	public Particle(double x, double y, double vx, double vy, double mass, int radius) {
 		this.x = x;
 		this.y = y;
 		this.vx = vx;
 		this.vy = vy;
 		this.mass = mass;
 		this.radius = radius;
+		color = defaultColor;
+	}
+	public Particle(double x, double y, double mass, int radius) {
+		this(x, y, 0, 0, mass, radius);
+	}
+	
+	public Particle(double x, double y, double vx, double vy, double mass, int radius, Color c) {
+		this(x, y, vx, vy, mass, radius);
 		this.color = c;
 	}
-
-	public Particle(double x, double y, double mass, int radius) {
-		this(x, y, 0, 0, mass, radius, Color.blue);
+	public Color getColor() {
+		return color;
+	}
+	
+	public int getRadius() {
+		return radius;
 	}
 
-	public Particle(double x, double y, double vx, double vy, double mass, int radius) {
-		this(x, y, vx, vy, mass, radius, Color.blue);
-	}
+	
 
-	public void render(Graphics g) {
-		Graphics2D g2d = (Graphics2D) g.create();
-		g2d.setColor(color);
-		g2d.fillOval((int) (x - (radius / 2)), (int) (y - (radius / 2)), radius, radius);
-		g2d.dispose();
-	}
+	
+
+	
 }
