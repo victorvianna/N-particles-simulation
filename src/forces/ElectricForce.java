@@ -1,5 +1,5 @@
 /**
- * Inherits from base Force class and is associated with an ElectricParticle class. 
+ * Implements interface Force and is associated with an ElectricParticle class. 
  * If we try to calculate the electric force with a non-electric particle,
  * the calculatedInteraction is 0, as such particle has no charge
  */

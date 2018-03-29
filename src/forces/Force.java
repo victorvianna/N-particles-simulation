@@ -1,5 +1,5 @@
 /**
- * Base class for forces. Every force inherits from it.
+ * Base interface for forces. Every force implements it.
  */
 package forces;
 

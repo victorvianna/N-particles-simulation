@@ -1,6 +1,8 @@
 # N-particles-simulation
 Multithreaded simulation of n particles in space. Gravitational and electric forces are implemented, but application may be easily scaled to consider other forces.
 
+![GUI](https://raw.githubusercontent.com/victorvianna/N-particles-simulation/master/screenshots/gui-screenshot.png) 
+
 ## Authors
 
 Cauim de Souza Lima  

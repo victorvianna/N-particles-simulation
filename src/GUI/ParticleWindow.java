@@ -25,7 +25,7 @@ public class ParticleWindow extends JFrame {
 	private ArrayList<Force> forces = new ArrayList<Force>();
 	private BufferStrategy bufferstrat = null;
 	private Canvas render;
-	public final static int WIDTH = 800, HEIGHT = 800, MAX_SPEED = 500, PARTICLE_SIZE = 5;
+	public final static int WIDTH = 800, HEIGHT = 800, MAX_SPEED = 500, PARTICLE_SIZE = 10;
 	public static boolean bouncingEnabled, initialSpeedEnabled;
 	private final double DELTA_TIME = 1 / 600.0; // time interval in seconds
 
