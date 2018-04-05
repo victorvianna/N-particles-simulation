@@ -16,7 +16,7 @@ Java 1.8
 
 Open a shell and run  
 ```
-$ sudo bash RUN.sh
+$ ./RUN.sh
 ```  
 You can either enter the particle data through the shell or pre-record it in a file input.txt. (If such a file exists, input will be read there!) Neutral particles are displayed in red, positive ones in blue and negative ones in green.
 

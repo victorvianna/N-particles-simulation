@@ -1,3 +1,4 @@
+#!/bin/sh
 rm -r bin/
 mkdir bin/
 find ./src -name "*.java" > sources_list.txt
